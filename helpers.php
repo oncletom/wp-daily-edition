@@ -7,5 +7,5 @@
  * @return null
  */
 function get_edito(){
-    return DailyEditionEdito::get();
+    return DailyEdition\Edito::get();
 }

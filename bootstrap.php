@@ -17,4 +17,4 @@ require $dir . '/lib/navigation.php';
 require $dir . '/lib/hooks.php';
 require $dir . '/helpers.php';
 
-DailyEditionHooks::register(is_admin() === false);
+DailyEdition\Hooks::register(is_admin() === false);

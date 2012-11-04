@@ -1,17 +1,19 @@
 <?php
 
-class DailyEditionHooks{
+namespace DailyEdition;
+
+class Hooks{
 
     public static function register($condition = true){
         if (!$condition){
             return false;
         }
 
-        add_action('parse_query', array('DailyEditionHooks', 'filterHomeQuery'));
-        add_action('posts_results', array('DailyEditionHooks', 'setupEdito'), 10, 2);
+        add_action('parse_query', array('\DailyEdition\Hooks', 'filterHomeQuery'));
+        add_action('posts_results', array('\DailyEdition\Hooks', 'setupEdito'), 10, 2);
     }
 
-    function filterHomeQuery(WP_Query &$query){
+    function filterHomeQuery(\WP_Query &$query){
         if ($query->is_main_query() && is_home()){
             $date = get_latest_edition_date();
 
@@ -22,7 +24,7 @@ class DailyEditionHooks{
         }
     }
 
-    function setupEdito(array $posts, WP_Query $query){
+    function setupEdito(array $posts, \WP_Query $query){
         if (!$query->is_main_query() || is_single()){
             return $posts;
         }
@@ -30,7 +32,7 @@ class DailyEditionHooks{
         foreach($posts as $i => &$post){
             foreach(get_the_category($post->ID) as $category){
                 if ($category->slug === 'edito'){
-                    DailyEditionEdito::set($post);
+                    Edito::set($post);
                     unset($posts[$i]);
 
                     break;

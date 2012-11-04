@@ -1,9 +1,11 @@
 <?php
 
-class DailyEditionEdito{
+namespace DailyEdition;
+
+class Edito{
     private static $edito;
 
-    public static function set(StdClass $post){
+    public static function set(\StdClass $post){
         self::$edito = $post;
     }
 
