@@ -1,0 +1,85 @@
+<?php
+
+/**
+ *
+ *
+ * @param string|null $format
+ * @return string
+ */
+function get_latest_edition_date($format = null){
+    static $date;
+
+    if (!isset($date)){
+        $posts = get_posts(array(
+            'numberposts' => 1,
+        ));
+
+        $date = $posts[0]->post_date;
+    }
+
+    if ($format === null){
+        return array_combine(array('year', 'month', 'day'), explode('-', mysql2date('Y-m-d', $posts[0]->post_date)));
+    }
+    else{
+        return date_i18n($format, mysql2date('U', $date));
+    }
+}
+
+/**
+ * @param null $date
+ * @return mixed|null
+ */
+function previous_edition_nav($date = null){
+    return edition_nav($date, '<', '00:00:00');
+}
+
+/**
+ * @param null $date
+ * @return mixed|null
+ */
+function next_edition_nav($date = null){
+    return edition_nav($date, '>', '23:59:59');
+}
+
+/**
+ * @param $date
+ * @param $operator
+ * @param $time
+ * @return mixed|null
+ */
+function edition_nav($date, $operator, $time){
+    /** @var $wpdb WPDB */
+    global 	$wpdb;
+
+    if ($date === null){
+        /** @var $post StdClass  */
+        global $post;
+
+        $date = $post->post_date;
+    }
+
+    $operator = $operator === '<' ? '<' : '>';
+    $date = preg_replace('# \d{2}:\d{2}:\d{2}#', ' '.$time, $date);
+
+    //retrieving candidate
+    $candidate = $wpdb->get_var( $wpdb->prepare(
+        "SELECT post_date FROM $wpdb->posts WHERE post_date ".$operator." %s AND post_status = %s AND post_type = %s ORDER BY post_date DESC LIMIT 1;",
+        $date, 'publish', 'post'
+    ));
+
+    if ($candidate !== null){
+        $day = preg_split('#[ -]#U', $candidate);
+        array_pop($day);
+        return call_user_func_array('get_day_link', $day);
+    }
+
+    return null;
+}
+
+function get_edition_link($post = null){
+    if ($post === null){
+        global $post;
+    }
+
+    return get_day_link(get_the_time('Y', $post), get_the_time('m', $post), get_the_time('d', $post));
+}
