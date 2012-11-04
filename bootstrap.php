@@ -15,6 +15,9 @@ $dir = dirname(__FILE__);
 require $dir . '/lib/edito.php';
 require $dir . '/lib/navigation.php';
 require $dir . '/lib/hooks.php';
+require $dir . '/lib/admin-hooks.php';
+require $dir . '/lib/admin-edition.php';
 require $dir . '/helpers.php';
 
 DailyEdition\Hooks::register(is_admin() === false);
+DailyEdition\Admin\Hooks::register(is_admin() === true);
