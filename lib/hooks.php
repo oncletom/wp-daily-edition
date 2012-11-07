@@ -21,6 +21,9 @@ class Hooks{
             $query->set('monthnum', $date['month']);
             $query->set('day', $date['day']);
             $query->set('nopaging', true);
+            $query->set('order', 'ASC');
+            $query->set('orderby', 'meta_value_num');
+            $query->set('meta_key', 'daily-edition-order');
         }
     }
 
