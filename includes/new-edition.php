@@ -7,7 +7,7 @@
         <div class="tablenav top">
             <div class="alignleft actions">
                 <label for="edition-number"><?php _e('Edition #') ?></label>
-                <input id="edition-number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
+                <input id="edition-number" name="edition_number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
                 <?php printf(__('for the <b>%s</b>', 'daily-edition'), $edition_date) ?>.
             </div>
         </div>
