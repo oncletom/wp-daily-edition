@@ -10,19 +10,35 @@ function get_latest_edition_date($format = null){
     static $date;
 
     if (!isset($date)){
-        $posts = get_posts(array(
-            'numberposts' => 1,
-        ));
+        $latest_post = get_latest_post();
 
-        $date = $posts[0]->post_date;
+        $date = $latest_post->post_date;
     }
 
     if ($format === null){
-        return array_combine(array('year', 'month', 'day'), explode('-', mysql2date('Y-m-d', $posts[0]->post_date)));
+        return array_combine(array('year', 'month', 'day'), explode('-', mysql2date('Y-m-d', $date)));
     }
     else{
         return date_i18n($format, mysql2date('U', $date));
     }
+}
+
+function get_latest_edition_number(){
+    return get_post_meta(get_latest_post()->ID, 'daily-edition-number', true);
+}
+
+function get_latest_post(){
+    static $latest_post;
+
+    if (!isset($latest_post)){
+        $posts = get_posts(array(
+            'numberposts' => 1,
+        ));
+
+        $latest_post = count($posts) ? $posts[0] : null;
+    }
+
+    return $latest_post;
 }
 
 /**
