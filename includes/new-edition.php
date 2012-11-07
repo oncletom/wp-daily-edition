@@ -1,28 +1,46 @@
 <div class="wrap">
     <h2><?php _e('Manage Editions', 'daily-edition') ?></h2>
 
-    <table class="wp-list-table widefat">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"><?php _e('Publish?', 'daily-edition') ?></th>
-                <th scope="col"><?php _e('Title') ?></th>
-                <th scope="col"><?php _e('Categories') ?></th>
-                <th scope="col"><?php _e('Date') ?></th>
-            </tr>
-        </thead>
-        <tbody class="ui-sortable">
-            <?php foreach ($posts as $post): ?>
-            <tr id="postId_<?php echo esc_attr($post->ID) ?>">
-                <td><span class="handle"></span> <input type="text" size="2" name="post_order[<?php echo esc_attr($post->ID) ?>]" value="<?php get_post_meta($post->ID, 'order', true) ?>" ?></td>
-                <td><input type="checkbox" name="post_publish[<?php echo esc_attr($post->ID) ?>]" value="1" checked="checked"></td>
-                <td><?php echo $post->post_title ?></td>
-                <td><?php the_category(', ', false, $post->ID) ?></td>
-                <td><?php echo $post->post_date ?></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
+    <form method="post" action="edit.php?page=editions">
+        <?php wp_nonce_field('daily-edition-new') ?>
+
+        <div class="tablenav top">
+            <div class="alignleft actions">
+                <label for="edition-number"><?php _e('Edition #') ?></label>
+                <input id="edition-number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
+                <?php printf(__('for the <b>%s</b>', 'daily-edition'), $edition_date) ?>.
+            </div>
+        </div>
+
+        <table class="wp-list-table widefat">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><?php _e('Publish?', 'daily-edition') ?></th>
+                    <th scope="col"><?php _e('Title') ?></th>
+                    <th scope="col"><?php _e('Categories') ?></th>
+                    <th scope="col"><?php _e('Date') ?></th>
+                </tr>
+            </thead>
+            <tbody class="ui-sortable">
+                <?php foreach ($posts as $i => $post): ?>
+                <tr id="postId_<?php echo esc_attr($post->ID) ?>">
+                    <td><span class="handle"></span> <input type="text" size="2" name="post_order[<?php echo esc_attr($post->ID) ?>]" value="<?php echo get_post_meta($post->ID, 'order', true) ? get_post_meta($post->ID, 'order', true) : $i + 1 ?>"></td>
+                    <td><input type="checkbox" name="post_publish[<?php echo esc_attr($post->ID) ?>]" value="1" checked="checked"></td>
+                    <td><?php echo $post->post_title ?></td>
+                    <td><?php the_category(', ', false, $post->ID) ?></td>
+                    <td><?php echo $post->post_date ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+        <div class="tablenav bottom">
+            <div class="alignleft actions">
+                <input class="button-primary action" type="submit" value="<?php esc_attr_e('Create this new edition, now.', 'daily-edition') ?>">
+            </div>
+        </div>
+    </form>
 </div>
 
 <script>
