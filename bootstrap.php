@@ -19,5 +19,7 @@ require $dir . '/lib/admin-hooks.php';
 require $dir . '/lib/admin-edition.php';
 require $dir . '/helpers.php';
 
+load_plugin_textdomain('daily-edition', null, 'daily-edition/i18n');
+
 DailyEdition\Hooks::register(is_admin() === false);
 DailyEdition\Admin\Hooks::register(is_admin() === true);
