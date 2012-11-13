@@ -14,7 +14,7 @@
                         </tr>
                         <?php foreach ($editions as $edition): ?><tr class="<?php echo $edition->edition_number === $_GET['edition_id'] ? 'active' : '' ?>">
                             <th><a href="?page=editions&edition_id=<?php echo esc_attr($edition->edition_number) ?>" class="widelink">
-                                    <?php printf(__('N°%d <small>(%s)</small>', 'daily-edition'), $edition->edition_number, mysql2date('j/m/Y', $edition->post_date)) ?>
+                              <?php printf(__('#%d <small>(%s)</small>', 'daily-edition'), $edition->edition_number, mysql2date('j/m/Y', $edition->post_date)) ?>
                             </a></th>
                         </tr><?php endforeach ?>
                         </tbody>
@@ -30,11 +30,10 @@
                 <div class="tablenav top">
                     <div class="alignleft actions">
                         <?php if ($edition_id): ?>
-                        <h3><?php _e('Edition #', 'daily-edition') ?><?php echo $edition_number ?></h3>
+                        <h3><?php printf(__('Edition #%s for the <b>%s</b>', 'daily-edition'), $edition_number, $edition_date) ?></h3>
                         <?php else: ?>
                         <label for="edition-number"><?php _e('Edition #', 'daily-edition') ?></label>
                         <input id="edition-number" name="edition_number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
-                        <?php printf(__('for the <b>%s</b>', 'daily-edition'), $edition_date) ?>.
                         <?php endif ?>
                     </div>
                 </div>

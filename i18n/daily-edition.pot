@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Canalblog Importer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-11 20:16+0100\n"
-"PO-Revision-Date: 2012-11-11 20:16+0100\n"
+"POT-Creation-Date: 2012-11-13 01:20+0100\n"
+"PO-Revision-Date: 2012-11-13 01:20+0100\n"
 "Last-Translator: Oncle Tom <thomas@oncle-tom.net>\n"
 "Language-Team:  <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,33 +25,65 @@ msgstr ""
 msgid "Manage Editions"
 msgstr ""
 
-#: ../includes/new-edition.php:9
+#: ../includes/new-edition.php:7
+msgid "Archives"
+msgstr ""
+
+#: ../includes/new-edition.php:13
+msgid "New Edition"
+msgstr ""
+
+#: ../includes/new-edition.php:17
+#, php-format
+msgid "#%d <small>(%s)</small>"
+msgstr ""
+
+#: ../includes/new-edition.php:33
+#, php-format
+msgid "Edition #%s for the <b>%s</b>"
+msgstr ""
+
+#: ../includes/new-edition.php:35
 msgid "Edition #"
 msgstr ""
 
-#: ../includes/new-edition.php:11
-#, php-format
-msgid "for the <b>%s</b>"
+#: ../includes/new-edition.php:46
+msgid "Unpublish?"
 msgstr ""
 
-#: ../includes/new-edition.php:19
-msgid "Publish?"
-msgstr ""
-
-#: ../includes/new-edition.php:20
+#: ../includes/new-edition.php:47
+#: ../includes/new-edition.php:78
 msgid "Title"
 msgstr ""
 
-#: ../includes/new-edition.php:21
+#: ../includes/new-edition.php:48
+#: ../includes/new-edition.php:79
 msgid "Categories"
 msgstr ""
 
-#: ../includes/new-edition.php:22
+#: ../includes/new-edition.php:49
+#: ../includes/new-edition.php:80
 msgid "Date"
 msgstr ""
 
-#: ../includes/new-edition.php:40
-msgid "Create this new edition, now."
+#: ../includes/new-edition.php:67
+msgid "Update this edition"
+msgstr ""
+
+#: ../includes/new-edition.php:72
+msgid "Not Yet Published Posts"
+msgstr ""
+
+#: ../includes/new-edition.php:77
+msgid "Publish?"
+msgstr ""
+
+#: ../includes/new-edition.php:99
+msgid "Add to this edition"
+msgstr ""
+
+#: ../includes/new-edition.php:101
+msgid "Create this new edition, now"
 msgstr ""
 
 #: ../lib/admin-edition.php:26
