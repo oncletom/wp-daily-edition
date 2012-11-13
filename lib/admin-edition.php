@@ -74,11 +74,13 @@ class Edition
         // Edition posts
         if ($edition_id){
             $posts = $wpdb->get_results( $wpdb->prepare(
-                "SELECT posts.ID, posts.post_title, posts.post_date ".
+                "SELECT posts.ID, posts.post_title, posts.post_date, meta_order.meta_value as post_order ".
                 "FROM $wpdb->postmeta as meta ".
                 "INNER JOIN $wpdb->posts as posts ON posts.ID = meta.post_id ".
-                "WHERE meta_key = %s AND meta_value = %d ",
-                'daily-edition-number', $edition_id
+                "LEFT JOIN $wpdb->postmeta as meta_order on meta_order.post_id = meta.post_id and meta_order.meta_key = %s ".
+                "WHERE meta.meta_key = %s AND meta.meta_value = %d ".
+                "ORDER BY post_order;",
+                'daily-edition-order', 'daily-edition-number', $edition_id
             ) );
         }
 
