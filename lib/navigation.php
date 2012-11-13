@@ -75,11 +75,12 @@ function edition_nav($date, $operator, $time){
     }
 
     $operator = $operator === '<' ? '<' : '>';
+    $ORDER = $operator === '>' ? 'ASC' : 'DESC';
     $date = preg_replace('# \d{2}:\d{2}:\d{2}#', ' '.$time, $date);
 
     //retrieving candidate
     $candidate = $wpdb->get_var( $wpdb->prepare(
-        "SELECT post_date FROM $wpdb->posts WHERE post_date ".$operator." %s AND post_status = %s AND post_type = %s ORDER BY post_date DESC LIMIT 1;",
+        "SELECT post_date FROM $wpdb->posts WHERE post_date ".$operator." %s AND post_status = %s AND post_type = %s ORDER BY post_date $ORDER LIMIT 1;",
         $date, 'publish', 'post'
     ));
 

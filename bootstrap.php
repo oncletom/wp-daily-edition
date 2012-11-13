@@ -12,7 +12,6 @@ Plugin URI: http://wordpress.org/extend/plugins/daily-edition/
 */
 
 $dir = dirname(__FILE__);
-require $dir . '/lib/edito.php';
 require $dir . '/lib/navigation.php';
 require $dir . '/lib/hooks.php';
 require $dir . '/lib/admin-hooks.php';
