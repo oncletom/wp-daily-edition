@@ -54,8 +54,8 @@
                         <tr id="postId_<?php echo esc_attr($post->ID) ?>">
                             <td><span class="handle"></span> <input type="text" size="2" name="post_order[<?php echo esc_attr($post->ID) ?>]" value="<?php echo get_post_meta($post->ID, 'order', true) ? get_post_meta($post->ID, 'order', true) : $i + 1 ?>"></td>
                             <td><input type="checkbox" name="post_unpublish[<?php echo esc_attr($post->ID) ?>]" value="1"></td>
-                            <td><?php echo $post->post_title ?></td>
-                            <td><?php the_category(', ', false, $post->ID) ?></td>
+                            <td><a href="post.php?post=<?php echo $post->ID ?>&amp;action=edit"><?php echo $post->post_title ?></a></td>
+                            <td><?php foreach(get_the_category($post->ID) as $term): ?><span class="tag"><?php echo $term->name ?></span><?php endforeach ?></td>
                             <td><?php echo mysql2date('j/m/Y', $post->post_date) ?></td>
                         </tr>
                         <?php endforeach ?>
@@ -89,8 +89,8 @@
                     <tr id="postId_<?php echo esc_attr($post->ID) ?>">
                         <td><span class="handle"></span> <input type="text" size="2" name="post_order[<?php echo esc_attr($post->ID) ?>]" value="<?php echo get_post_meta($post->ID, 'order', true) ? get_post_meta($post->ID, 'order', true) : $i + 1 ?>"></td>
                         <td><input type="checkbox" name="post_publish[<?php echo esc_attr($post->ID) ?>]" value="1" checked="checked"></td>
-                        <td><?php echo $post->post_title ?></td>
-                        <td><?php the_category(', ', false, $post->ID) ?></td>
+                        <td><a href="post.php?post=<?php echo $post->ID ?>&amp;action=edit"><?php echo $post->post_title ?></a></td>
+                        <td><?php foreach(get_the_category($post->ID) as $term): ?><span class="tag"><?php echo $term->name ?></span><?php endforeach ?></td>
                         <td><?php echo mysql2date('j/m/Y', $post->post_date) ?></td>
                     </tr>
                         <?php endforeach ?>
@@ -154,5 +154,12 @@
 }
     .active .widelink{
         font-weight: bold;
+    }
+
+.tag::after{
+    content: ", ";
+}
+    .tag:last-of-type::after{
+        content: "";
     }
 </style>
