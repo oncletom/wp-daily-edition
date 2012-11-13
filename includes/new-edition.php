@@ -56,7 +56,7 @@
                             <td><input type="checkbox" name="post_unpublish[<?php echo esc_attr($post->ID) ?>]" value="1"></td>
                             <td><?php echo $post->post_title ?></td>
                             <td><?php the_category(', ', false, $post->ID) ?></td>
-                            <td><?php echo $post->post_date ?></td>
+                            <td><?php echo mysql2date('j/m/Y', $post->post_date) ?></td>
                         </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -91,7 +91,7 @@
                         <td><input type="checkbox" name="post_publish[<?php echo esc_attr($post->ID) ?>]" value="1" checked="checked"></td>
                         <td><?php echo $post->post_title ?></td>
                         <td><?php the_category(', ', false, $post->ID) ?></td>
-                        <td><?php echo $post->post_date ?></td>
+                        <td><?php echo mysql2date('j/m/Y', $post->post_date) ?></td>
                     </tr>
                         <?php endforeach ?>
                     </tbody>
