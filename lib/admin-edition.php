@@ -37,34 +37,82 @@ class Edition
 
         /** @global wpdb */
         global $wpdb;
+        $editions = array();
+        $posts = array();
+        $unpublished = array();
+        $edition_date = null;
+        $edition_number = null;
+        $edition_id = null;
+
+        // List latest editions
+        $editions = $wpdb->get_results( $wpdb->prepare(
+            "SELECT posts.ID, posts.post_date, meta.meta_value as edition_number ".
+            "FROM $wpdb->postmeta AS meta ".
+            "INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id ".
+            "WHERE meta_key = %s ".
+            "GROUP BY meta_value DESC LIMIT 10",
+            'daily-edition-number'
+        ));
 
         // Extract candidate posts
-        $posts = get_posts(array(
+        $unpublished = get_posts(array(
             'post_type' => 'post',
             'post_status' => 'pending',
             'numberposts' => -1
         ));
 
-        // Generating edition number
-        $edition_number = $wpdb->get_var( $wpdb->prepare(
-            "SELECT MAX(meta_value) FROM $wpdb->postmeta WHERE meta_key = %s;",
-            'daily-edition-number'
-        ) );
-        $edition_number++;
-
         // Electing edition date
-        $edition_date = isset($posts[0]) ? $posts[0]->post_date : null;
-        foreach ($posts as $post){
-            if ($post->post_date < $edition_date){
-                $edition_date = $post->post_date;
-            }
+        list($edition_number, $edition_date) = self::getEdition((int)$_GET['edition_id']);
+
+        if ($edition_date && $edition_number){
+            $edition_id = (int)$edition_number;
+        }
+
+        // Edition posts
+        if ($edition_id){
+            $posts = $wpdb->get_results( $wpdb->prepare(
+                "SELECT posts.ID, posts.post_title, posts.post_date ".
+                "FROM $wpdb->postmeta as meta ".
+                "INNER JOIN $wpdb->posts as posts ON posts.ID = meta.post_id ".
+                "WHERE meta_key = %s AND meta_value = %d ",
+                'daily-edition-number', $edition_id
+            ) );
+        }
+
+        include dirname(__FILE__) . '/../includes/new-edition.php';
+    }
+
+    public static function getEdition($edition_id = null){
+        global $wpdb;
+
+        $edition_number = null;
+        $edition_date = null;
+
+        if ($edition_id){
+            $result = $wpdb->get_row( $wpdb->prepare(
+                "SELECT post_date, meta_value ".
+                "FROM $wpdb->postmeta INNER JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->postmeta.post_id ".
+                "WHERE meta_key = %s AND meta_value = %d LIMIT 1;", 'daily-edition-number', $edition_id
+            ) );
+
+            $edition_number = $result->meta_value;
+            $edition_date = $result->post_date;
+        }
+        else{
+            $result = $wpdb->get_row( $wpdb->prepare(
+                "SELECT MAX(meta_value) as edition_number ".
+                    "FROM $wpdb->postmeta ".
+                    "WHERE meta_key = %s;", 'daily-edition-number'
+            ) );
+
+            $edition_number = (int)$result->edition_number + 1;
         }
 
         if ($edition_date !== null){
             $edition_date = mysql2date('l j F Y', $edition_date);
         }
 
-        include dirname(__FILE__) . '/../includes/new-edition.php';
+        return array($edition_number, $edition_date);
     }
 
     public static function processEdition($edition_number, array $post_order, array $publish){
