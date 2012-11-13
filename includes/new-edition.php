@@ -24,8 +24,8 @@
         </div>
 
         <div id="menu-management-liquid">
-            <form method="post" action="edit.php?page=editions">
-                <?php wp_nonce_field('daily-edition-new') ?>
+            <form method="post" action="edit.php?page=editions&amp;edition_id=<?php echo esc_attr($edition_id) ?>">
+                <?php wp_nonce_field('daily-edition-update') ?>
 
                 <div class="tablenav top">
                     <div class="alignleft actions">
@@ -68,6 +68,10 @@
                     </div>
                 </div>
                 <?php endif ?>
+            </form>
+
+            <form method="post" action="edit.php?page=editions&amp;edition_id=<?php echo esc_attr($edition_id) ?>">
+                <?php wp_nonce_field('daily-edition-'.($edition_id ? 'add' : 'new')) ?>
 
                 <h3><?php _e('Not Yet Published Posts', 'daily-edition') ?></h3>
                 <table class="wp-list-table widefat">

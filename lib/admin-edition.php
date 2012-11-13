@@ -26,15 +26,6 @@ class Edition
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
 
-        if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new')){
-            try{
-                self::processEdition((int)$_POST['edition_number'], $_POST['post_order'], $_POST['post_publish']);
-            }
-            catch(Exception $e){
-                //error message
-            }
-        }
-
         /** @global wpdb */
         global $wpdb;
         $editions = array();
@@ -43,6 +34,25 @@ class Edition
         $edition_date = null;
         $edition_number = null;
         $edition_id = null;
+
+        // Electing edition date
+        list($edition_number, $edition_date) = self::getEdition((int)$_GET['edition_id']);
+
+        if ($edition_date && $edition_number){
+            $edition_id = (int)$edition_number;
+        }
+
+        if (isset($_POST['_wpnonce'])){
+            if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new')){
+                self::processEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+            }
+            elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
+                self::processEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+            }
+            elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){
+                self::processUpdateEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
+            }
+        }
 
         // List latest editions
         $editions = $wpdb->get_results( $wpdb->prepare(
@@ -60,13 +70,6 @@ class Edition
             'post_status' => 'pending',
             'numberposts' => -1
         ));
-
-        // Electing edition date
-        list($edition_number, $edition_date) = self::getEdition((int)$_GET['edition_id']);
-
-        if ($edition_date && $edition_number){
-            $edition_id = (int)$edition_number;
-        }
 
         // Edition posts
         if ($edition_id){
@@ -95,7 +98,7 @@ class Edition
                 "WHERE meta_key = %s AND meta_value = %d LIMIT 1;", 'daily-edition-number', $edition_id
             ) );
 
-            $edition_number = $result->meta_value;
+            $edition_number = (int)$result->meta_value;
             $edition_date = $result->post_date;
         }
         else{
@@ -116,7 +119,7 @@ class Edition
     }
 
     public static function processEdition($edition_number, array $post_order, array $publish){
-        foreach ($post_order as $post_id => $post_order){
+        foreach ((array)$post_order as $post_id => $post_order){
             if (!isset($publish[ $post_id ])){
                 continue;
             }
@@ -129,6 +132,21 @@ class Edition
             update_post_meta($post_id, 'daily-edition-number', (int)$edition_number);
 
             wp_publish_post($post_id);
+        }
+    }
+
+    public static function processUpdateEdition($edition_number, array $post_order, array $unpublish){
+        foreach ((array)$post_order as $post_id => $post_order){
+            if (isset($unpublish[ $post_id ])){
+                wp_update_post(array('ID' => $post_id, 'post_status' => 'pending'));
+                delete_post_meta($post_id, 'daily-edition-number');
+                delete_post_meta($post_id, 'daily-edition-order');
+            }
+            else{
+                // just to be sure
+                add_post_meta($post_id, 'daily-edition-order', (int)$post_order, true);
+                update_post_meta($post_id, 'daily-edition-order', (int)$post_order);
+            }
         }
     }
 }
