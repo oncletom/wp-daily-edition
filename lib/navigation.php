@@ -33,6 +33,7 @@ function get_latest_post(){
     if (!isset($latest_post)){
         $posts = get_posts(array(
             'numberposts' => 1,
+            'meta_key' => 'daily-edition-number'
         ));
 
         $latest_post = count($posts) ? $posts[0] : null;
