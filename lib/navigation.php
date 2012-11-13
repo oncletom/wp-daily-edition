@@ -81,8 +81,11 @@ function edition_nav($date, $operator, $time){
 
     //retrieving candidate
     $candidate = $wpdb->get_var( $wpdb->prepare(
-        "SELECT post_date FROM $wpdb->posts WHERE post_date ".$operator." %s AND post_status = %s AND post_type = %s ORDER BY post_date $ORDER LIMIT 1;",
-        $date, 'publish', 'post'
+        "SELECT post_date FROM $wpdb->posts ".
+        "INNER JOIN $wpdb->postmeta ON (post_id = id AND meta_key = %s) ".
+        "WHERE post_date ".$operator." %s AND post_status = %s AND post_type = %s ".
+        "ORDER BY post_date $ORDER LIMIT 1;",
+        'daily-edition-number', $date, 'publish', 'post'
     ));
 
     if ($candidate !== null){
