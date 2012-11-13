@@ -36,21 +36,23 @@ class Edition
         $edition_id = null;
 
         // Electing edition date
-        list($edition_number, $edition_date) = self::getEdition((int)$_GET['edition_id']);
+        $editionArgs = self::getEdition((int)$_GET['edition_id']);
+        extract($editionArgs);
 
         if ($edition_date && $edition_number){
             $edition_id = (int)$edition_number;
         }
 
+        // Processing content
         if (isset($_POST['_wpnonce'])){
             if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new')){
-                self::processEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+                self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
             }
             elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
-                self::processEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+                self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
             }
             elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){
-                self::processUpdateEdition($edition_number, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
+                self::processUpdateEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
             }
         }
 
@@ -111,33 +113,32 @@ class Edition
             ) );
 
             $edition_number = (int)$result->edition_number + 1;
+            $edition_date = date('Y-m-d H:s');
         }
 
-        if ($edition_date !== null){
-            $edition_date = mysql2date('l j F Y', $edition_date);
-        }
-
-        return array($edition_number, $edition_date);
+        return array('edition_number' => $edition_number, 'edition_date' => $edition_date);
     }
 
-    public static function processEdition($edition_number, array $post_order, array $publish){
+    public static function processEdition(array $editionArgs, array $post_order, array $publish){
         foreach ((array)$post_order as $post_id => $post_order){
             if (!isset($publish[ $post_id ])){
                 continue;
             }
 
+            wp_update_post(array('ID' => $post_id, 'post_date' => $editionArgs['edition_date']));
+
             // just to be sure
             add_post_meta($post_id, 'daily-edition-order', (int)$post_order, true);
             update_post_meta($post_id, 'daily-edition-order', (int)$post_order);
 
-            add_post_meta($post_id, 'daily-edition-number', (int)$edition_number, true);
-            update_post_meta($post_id, 'daily-edition-number', (int)$edition_number);
+            add_post_meta($post_id, 'daily-edition-number', (int)$editionArgs['edition_number'], true);
+            update_post_meta($post_id, 'daily-edition-number', (int)$editionArgs['edition_number']);
 
             wp_publish_post($post_id);
         }
     }
 
-    public static function processUpdateEdition($edition_number, array $post_order, array $unpublish){
+    public static function processUpdateEdition(array $editionArgs, array $post_order, array $unpublish){
         foreach ((array)$post_order as $post_id => $post_order){
             if (isset($unpublish[ $post_id ])){
                 wp_update_post(array('ID' => $post_id, 'post_status' => 'pending'));

@@ -30,7 +30,7 @@
                 <div class="tablenav top">
                     <div class="alignleft actions">
                         <?php if ($edition_id): ?>
-                        <h3><?php printf(__('Edition #%s for the <b>%s</b>', 'daily-edition'), $edition_number, $edition_date) ?></h3>
+                        <h3><?php printf(__('Edition #%s for the <b>%s</b>', 'daily-edition'), $edition_number, mysql2date('l j F Y', $edition_date)) ?></h3>
                         <?php else: ?>
                         <label for="edition-number"><?php _e('Edition #', 'daily-edition') ?></label>
                         <input id="edition-number" name="edition_number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
