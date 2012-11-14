@@ -24,7 +24,7 @@
         </div>
 
         <div id="menu-management-liquid">
-            <?php do_action('daily-edition-manage-before', $edition_id, $edition->post_date, $posts) ?>
+            <?php do_action('daily-edition-manage-before', $edition_id, $edition_date, $posts) ?>
 
             <form method="post" action="edit.php?page=editions&amp;edition_id=<?php echo esc_attr($edition_id) ?>">
                 <?php wp_nonce_field('daily-edition-update') ?>
@@ -39,8 +39,6 @@
                         <?php endif ?>
                     </div>
                 </div>
-
-                <?php do_action('daily-edition-manage-middle', $edition_id, $edition->post_date, $posts) ?>
 
                 <?php if (!empty($posts)): ?>
                 <table class="wp-list-table widefat">
@@ -70,11 +68,13 @@
                     <div class="alignleft actions">
                         <input class="button-primary action" type="submit" value="<?php esc_attr_e('Update this edition', 'daily-edition') ?>">
 
-                        <?php do_action('daily-edition-tablenav-published', $edition_id, $edition->post_date, $posts) ?>
+                        <?php do_action('daily-edition-tablenav-published', $edition_id, $edition_date, $posts) ?>
                     </div>
                 </div>
                 <?php endif ?>
             </form>
+
+            <?php do_action('daily-edition-manage-middle', $edition_id, $edition_date, $posts) ?>
 
             <form method="post" action="edit.php?page=editions&amp;edition_id=<?php echo esc_attr($edition_id) ?>">
                 <?php wp_nonce_field('daily-edition-'.($edition_id ? 'add' : 'new')) ?>
@@ -110,12 +110,12 @@
                         <?php else: ?>
                         <input class="button-primary action" type="submit" value="<?php esc_attr_e('Create this new edition, now', 'daily-edition') ?>">
                         <?php endif ?>
-                        <?php do_action('daily-edition-tablenav-unpublished', $edition_id, $edition->post_date, $unpublished) ?>
+                        <?php do_action('daily-edition-tablenav-unpublished', $edition_id, $edition_date, $unpublished) ?>
                     </div>
                 </div>
             </form>
 
-            <?php do_action('daily-edition-manage-after', $edition_id, $edition->post_date, $posts) ?>
+            <?php do_action('daily-edition-manage-after', $edition_id, $edition_date, $posts) ?>
         </div>
     </div>
 </div>
