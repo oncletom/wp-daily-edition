@@ -76,8 +76,8 @@
 
             <?php do_action('daily-edition-manage-middle', $edition_id, $edition_date, $posts) ?>
 
-            <form method="post" action="edit.php?page=editions&amp;edition_id=<?php echo esc_attr($edition_id) ?>">
-                <?php wp_nonce_field('daily-edition-'.($edition_id ? 'add' : 'new')) ?>
+            <form method="post" action="edit.php?page=editions<?php if(isset($_GET['edition_id'])): ?>&amp;edition_id=<?php echo esc_attr($edition_id); endif ?>">
+                <?php wp_nonce_field('daily-edition-'.($_GET['edition_id'] ? 'add' : 'new')) ?>
 
                 <h3><?php _e('Not Yet Published Posts', 'daily-edition') ?></h3>
                 <table class="wp-list-table widefat">
