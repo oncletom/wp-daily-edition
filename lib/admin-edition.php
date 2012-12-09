@@ -37,18 +37,19 @@ class Edition
 
         // Electing edition date
         $editionArgs = self::getEdition((int)$_GET['edition_id']);
-        extract($editionArgs);
 
+        if (isset($_POST['edition_number'])){
+            $editionArgs['edition_number'] = (int)$_POST['edition_number'];
+        }
+
+        extract($editionArgs);
         if ($edition_date && $edition_number){
             $edition_id = (int)$edition_number;
         }
 
         // Processing content
         if (isset($_POST['_wpnonce'])){
-            if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new')){
-                self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
-            }
-            elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
+            if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new') || wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
                 self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
             }
             elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){

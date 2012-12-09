@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Canalblog Importer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-13 01:20+0100\n"
-"PO-Revision-Date: 2012-11-13 01:20+0100\n"
+"POT-Creation-Date: 2012-12-09 18:24+0100\n"
+"PO-Revision-Date: 2012-12-09 18:24+0100\n"
 "Last-Translator: Oncle Tom <thomas@oncle-tom.net>\n"
 "Language-Team:  <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,7 @@ msgid "Archives"
 msgstr ""
 
 #: ../includes/new-edition.php:13
+#: ../includes/new-edition.php:37
 msgid "New Edition"
 msgstr ""
 
@@ -38,52 +39,52 @@ msgstr ""
 msgid "#%d <small>(%s)</small>"
 msgstr ""
 
-#: ../includes/new-edition.php:33
+#: ../includes/new-edition.php:35
 #, php-format
 msgid "Edition #%s for the <b>%s</b>"
 msgstr ""
 
-#: ../includes/new-edition.php:35
-msgid "Edition #"
-msgstr ""
-
-#: ../includes/new-edition.php:46
+#: ../includes/new-edition.php:47
 msgid "Unpublish?"
 msgstr ""
 
-#: ../includes/new-edition.php:47
-#: ../includes/new-edition.php:78
+#: ../includes/new-edition.php:48
+#: ../includes/new-edition.php:87
 msgid "Title"
 msgstr ""
 
-#: ../includes/new-edition.php:48
-#: ../includes/new-edition.php:79
+#: ../includes/new-edition.php:49
+#: ../includes/new-edition.php:88
 msgid "Categories"
 msgstr ""
 
-#: ../includes/new-edition.php:49
-#: ../includes/new-edition.php:80
+#: ../includes/new-edition.php:50
+#: ../includes/new-edition.php:89
 msgid "Date"
 msgstr ""
 
-#: ../includes/new-edition.php:67
+#: ../includes/new-edition.php:68
 msgid "Update this edition"
 msgstr ""
 
-#: ../includes/new-edition.php:72
+#: ../includes/new-edition.php:81
 msgid "Not Yet Published Posts"
 msgstr ""
 
-#: ../includes/new-edition.php:77
+#: ../includes/new-edition.php:86
 msgid "Publish?"
 msgstr ""
 
-#: ../includes/new-edition.php:99
+#: ../includes/new-edition.php:108
 msgid "Add to this edition"
 msgstr ""
 
-#: ../includes/new-edition.php:101
+#: ../includes/new-edition.php:110
 msgid "Create this new edition, now"
+msgstr ""
+
+#: ../includes/new-edition.php:111
+msgid "with this number:"
 msgstr ""
 
 #: ../lib/admin-edition.php:26

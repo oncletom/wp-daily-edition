@@ -31,11 +31,10 @@
 
                 <div class="tablenav top">
                     <div class="alignleft actions">
-                        <?php if ($edition_id): ?>
-                        <h3><?php printf(__('Edition #%s for the <b>%s</b>', 'daily-edition'), $edition_number, mysql2date('l j F Y', $edition_date)) ?></h3>
+                        <?php if (isset($_GET['edition_id'])): ?>
+                        <h2><?php printf(__('Edition #%s for the <b>%s</b>', 'daily-edition'), $edition_number, mysql2date('l j F Y', $edition_date)) ?></h2>
                         <?php else: ?>
-                        <label for="edition-number"><?php _e('Edition #', 'daily-edition') ?></label>
-                        <input id="edition-number" name="edition_number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>
+                        <h2><?php _e('New Edition', 'daily-edition') ?></h2>
                         <?php endif ?>
                     </div>
                 </div>
@@ -77,7 +76,7 @@
             <?php do_action('daily-edition-manage-middle', $edition_id, $edition_date, $posts) ?>
 
             <form method="post" action="edit.php?page=editions<?php if(isset($_GET['edition_id'])): ?>&amp;edition_id=<?php echo esc_attr($edition_id); endif ?>">
-                <?php wp_nonce_field('daily-edition-'.($_GET['edition_id'] ? 'add' : 'new')) ?>
+                <?php wp_nonce_field('daily-edition-'.(isset($_GET['edition_id']) ? 'add' : 'new')) ?>
 
                 <h3><?php _e('Not Yet Published Posts', 'daily-edition') ?></h3>
                 <table class="wp-list-table widefat">
@@ -105,10 +104,12 @@
 
                 <div class="tablenav bottom">
                     <div class="alignleft actions">
-                        <?php if ($edition_id): ?>
+                        <?php if (isset($_GET['edition_id'])): ?>
                         <input class="button-primary action" type="submit" value="<?php esc_attr_e('Add to this edition', 'daily-edition') ?>">
                         <?php else: ?>
                         <input class="button-primary action" type="submit" value="<?php esc_attr_e('Create this new edition, now', 'daily-edition') ?>">
+                        (<label for="edition-number"><?php _e('with this number:', 'daily-edition') ?></label>
+                        <input id="edition-number" name="edition_number" type="number" value="<?php echo esc_attr($edition_number) ?>" size="4" min="1" required>)
                         <?php endif ?>
                         <?php do_action('daily-edition-tablenav-unpublished', $edition_id, $edition_date, $unpublished) ?>
                     </div>

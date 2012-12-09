@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Canalblog Importer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-13 01:20+0100\n"
-"PO-Revision-Date: 2012-11-15 16:56+0100\n"
+"POT-Creation-Date: 2012-12-09 18:24+0100\n"
+"PO-Revision-Date: 2012-12-09 18:24+0100\n"
 "Last-Translator: Oncle Tom <thomas@oncle-tom.net>\n"
 "Language-Team:  <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,7 @@ msgid "Archives"
 msgstr "Archives"
 
 #: ../includes/new-edition.php:13
+#: ../includes/new-edition.php:37
 msgid "New Edition"
 msgstr "Nouvelle édition"
 
@@ -38,55 +39,57 @@ msgstr "Nouvelle édition"
 msgid "#%d <small>(%s)</small>"
 msgstr "N°%d <small>(%s)</small>"
 
-#: ../includes/new-edition.php:33
+#: ../includes/new-edition.php:35
 #, php-format
 msgid "Edition #%s for the <b>%s</b>"
 msgstr "Édition n°%s en date du <b>%s</b>"
 
-#: ../includes/new-edition.php:35
-msgid "Edition #"
-msgstr "Édition n°"
-
-#: ../includes/new-edition.php:46
+#: ../includes/new-edition.php:47
 msgid "Unpublish?"
 msgstr "Dépublier ?"
 
-#: ../includes/new-edition.php:47
-#: ../includes/new-edition.php:78
+#: ../includes/new-edition.php:48
+#: ../includes/new-edition.php:87
 msgid "Title"
 msgstr "Titre"
 
-#: ../includes/new-edition.php:48
-#: ../includes/new-edition.php:79
+#: ../includes/new-edition.php:49
+#: ../includes/new-edition.php:88
 msgid "Categories"
 msgstr "Catégories"
 
-#: ../includes/new-edition.php:49
-#: ../includes/new-edition.php:80
+#: ../includes/new-edition.php:50
+#: ../includes/new-edition.php:89
 msgid "Date"
 msgstr "Date"
 
-#: ../includes/new-edition.php:67
+#: ../includes/new-edition.php:68
 msgid "Update this edition"
 msgstr "Mettre à jour cette édition"
 
-#: ../includes/new-edition.php:72
+#: ../includes/new-edition.php:81
 msgid "Not Yet Published Posts"
 msgstr "Articles en attente de publication"
 
-#: ../includes/new-edition.php:77
+#: ../includes/new-edition.php:86
 msgid "Publish?"
 msgstr "Publier ?"
 
-#: ../includes/new-edition.php:99
+#: ../includes/new-edition.php:108
 msgid "Add to this edition"
 msgstr "Ajouter à cette édition"
 
-#: ../includes/new-edition.php:101
+#: ../includes/new-edition.php:110
 msgid "Create this new edition, now"
 msgstr "Créer cette édition, maintenant"
+
+#: ../includes/new-edition.php:111
+msgid "with this number:"
+msgstr "avec ce numéro :"
 
 #: ../lib/admin-edition.php:26
 msgid "You do not have sufficient permissions to access this page."
 msgstr "Vous ne disposez pas des permissions nécessaires pour accéder à cette page."
 
+#~ msgid "Edition #"
+#~ msgstr "Édition n°"
