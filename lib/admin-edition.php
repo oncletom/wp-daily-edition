@@ -5,20 +5,47 @@ namespace DailyEdition\Admin;
 class Edition
 {
     public static function register(){
+        $class = '\DailyEdition\Admin\Edition';
+
         $page = \add_posts_page(
             __('Manage Editions', 'daily-edition'),
             __('Manage Editions', 'daily-edition'),
             'publish_posts',
             'editions',
-            array('\DailyEdition\Admin\Edition', 'ManagementPage')
+            array($class, 'ManagementPage')
         );
 
-        add_action('admin_print_scripts-'.$page, array('\DailyEdition\Admin\Edition', 'registerScripts'));
+        add_action('load-'.$page, array($class, 'processForm'));
+        add_action('admin_print_scripts-'.$page, array($class, 'registerScripts'));
     }
 
     public static function registerScripts(){
         wp_enqueue_script('jquery-ui-draggable');
         wp_enqueue_script('jquery-ui-sortable');
+    }
+
+    public static function processForm(){
+        if (!isset($_POST) || empty($_POST) || !isset($_POST['_wpnonce'])){
+            return;
+        }
+
+        $editionArgs = self::getEdition((int)$_GET['edition_id'], (int)$_POST['edition_number']);
+
+        if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new')){
+            self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+            do_action('daily-edition-new', $editionArgs, $_POST['post_publish']);
+            wp_redirect(admin_url('edit.php?page=editions&edition_id='.$editionArgs['edition_id'].'&message=created'));
+        }
+        elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
+            self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
+            do_action('daily-edition-add', $editionArgs, $_POST['post_publish']);
+            wp_redirect(admin_url('edit.php?page=editions&edition_id='.$editionArgs['edition_id'].'&message=added'));
+        }
+        elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){
+            self::processUpdateEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
+            do_action('daily-edition-update', $editionArgs, $_POST['post_order'], $_POST['post_unpublish']);
+            wp_redirect(admin_url('edit.php?page=editions&edition_id='.$editionArgs['edition_id'].'&message=updated'));
+        }
     }
 
     public static function ManagementPage(){
@@ -36,26 +63,8 @@ class Edition
         $edition_id = null;
 
         // Electing edition date
-        $editionArgs = self::getEdition((int)$_GET['edition_id']);
-
-        if (isset($_POST['edition_number'])){
-            $editionArgs['edition_number'] = (int)$_POST['edition_number'];
-        }
-
+        $editionArgs = self::getEdition((int)$_GET['edition_id'], (int)$_POST['edition_number']);
         extract($editionArgs);
-        if ($edition_date && $edition_number){
-            $edition_id = (int)$edition_number;
-        }
-
-        // Processing content
-        if (isset($_POST['_wpnonce'])){
-            if (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-new') || wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-add')){
-                self::processEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_publish']);
-            }
-            elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){
-                self::processUpdateEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
-            }
-        }
 
         // List latest editions
         $editions = $wpdb->get_results( $wpdb->prepare(
@@ -90,7 +99,7 @@ class Edition
         include dirname(__FILE__) . '/../includes/new-edition.php';
     }
 
-    public static function getEdition($edition_id = null){
+    public static function getEdition($edition_id = null, $default_id = null){
         global $wpdb;
 
         $edition_number = null;
@@ -113,11 +122,16 @@ class Edition
                     "WHERE meta_key = %s;", 'daily-edition-number'
             ) );
 
-            $edition_number = (int)$result->edition_number + 1;
+            $edition_number = $default_id ? $default_id : (int)$result->edition_number + 1;
             $edition_date = date('Y-m-d H:s');
         }
 
-        return array('edition_number' => $edition_number, 'edition_date' => $edition_date);
+        // Backport fix: the 2 cases are always fulfilled.
+        if ($edition_date && $edition_number){
+            $edition_id = (int)$edition_number;
+        }
+
+        return array('edition_number' => $edition_number, 'edition_date' => $edition_date, 'edition_id' => $edition_id);
     }
 
     public static function processEdition(array $editionArgs, array $post_order, array $publish){
