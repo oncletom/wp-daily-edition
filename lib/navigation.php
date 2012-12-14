@@ -27,6 +27,21 @@ function get_latest_edition_number(){
     return get_post_meta(get_latest_post()->ID, 'daily-edition-number', true);
 }
 
+function get_current_edition_date(){
+    global $wp_query;
+
+    if ($wp_query->get('day')){
+        return sprintf('%s-%02s-%02s',
+            $wp_query->get('year'),
+            $wp_query->get('monthnum'),
+            $wp_query->get('day')
+        );
+    }
+    else{
+        return null;
+    }
+}
+
 function get_latest_post(){
     static $latest_post;
 
