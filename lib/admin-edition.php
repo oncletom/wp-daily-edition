@@ -44,7 +44,14 @@ class Edition
         elseif (wp_verify_nonce($_POST['_wpnonce'], 'daily-edition-update')){
             self::processUpdateEdition($editionArgs, (array)$_POST['post_order'], (array)$_POST['post_unpublish']);
             do_action('daily-edition-update', $editionArgs, $_POST['post_order'], $_POST['post_unpublish']);
-            wp_redirect(admin_url('edit.php?page=editions&edition_id='.$editionArgs['edition_id'].'&message=updated'));
+
+            // Everything is unpublished
+            if (count($_POST['post_order']) === count($_POST['post_unpublish'])){
+                wp_redirect(admin_url('edit.php?page=editions&message=updated'));
+            }
+            else{
+                wp_redirect(admin_url('edit.php?page=editions&edition_id='.$editionArgs['edition_id'].'&message=updated'));
+            }
         }
     }
 
