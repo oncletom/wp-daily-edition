@@ -27,6 +27,26 @@ function get_latest_edition_number(){
     return get_post_meta(get_latest_post()->ID, 'daily-edition-number', true);
 }
 
+function get_contextual_edition_number(){
+    if ($date = get_current_edition_date()){
+        global $post;
+
+        return get_post_meta($post->ID, 'daily-edition-number', true);
+    }
+    else{
+        return get_latest_edition_number();
+    }
+}
+
+function get_contextual_edition_date($format = null){
+    if ($date = get_current_edition_date()){
+        return date_i18n($format, mysql2date('U', $date));
+    }
+    else{
+        return get_latest_edition_date($format);
+    }
+}
+
 function get_current_edition_date(){
     global $wp_query;
 
