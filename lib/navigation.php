@@ -28,10 +28,10 @@ function get_latest_edition_number(){
 }
 
 function get_contextual_edition_number(){
-    if ($date = get_current_edition_date()){
-        global $post;
+    global $post;
 
-        return get_post_meta($post->ID, 'daily-edition-number', true);
+    if ($post && $number = get_post_meta($post->ID, 'daily-edition-number', true)){
+        return $number;
     }
     else{
         return get_latest_edition_number();
@@ -39,8 +39,10 @@ function get_contextual_edition_number(){
 }
 
 function get_contextual_edition_date($format = null){
-    if ($date = get_current_edition_date()){
-        return date_i18n($format, mysql2date('U', $date));
+    global $post;
+
+    if ($post && get_post_meta($post->ID, 'daily-edition-number', true)){
+        return date_i18n($format, mysql2date('U', $post->post_date));
     }
     else{
         return get_latest_edition_date($format);
