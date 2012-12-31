@@ -27,6 +27,17 @@ function get_latest_edition_number(){
     return get_post_meta(get_latest_post()->ID, 'daily-edition-number', true);
 }
 
+function get_contextual_post(){
+    global $post;
+
+    if ($post && get_post_meta($post->ID, 'daily-edition-number', true)){
+        return $post;
+    }
+    else{
+        return get_latest_post();
+    }
+}
+
 function get_contextual_edition_number(){
     global $post;
 
