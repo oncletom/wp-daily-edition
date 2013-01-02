@@ -5,6 +5,10 @@ namespace DailyEdition\Admin;
 class Edition
 {
     public static function register(){
+        if (!current_user_can('edit_others_posts')){
+            return;
+        }
+
         $class = '\DailyEdition\Admin\Edition';
 
         $page = \add_posts_page(
