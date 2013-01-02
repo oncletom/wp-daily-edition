@@ -1,5 +1,9 @@
 <?php
 
+function is_edition(){
+    return (is_day() || is_single());
+}
+
 /**
  *
  *
@@ -30,7 +34,7 @@ function get_latest_edition_number(){
 function get_contextual_post(){
     global $post;
 
-    if ($post && get_post_meta($post->ID, 'daily-edition-number', true)){
+    if (is_edition() && $post && get_post_meta($post->ID, 'daily-edition-number', true)){
         return $post;
     }
     else{
@@ -41,7 +45,7 @@ function get_contextual_post(){
 function get_contextual_edition_number(){
     global $post;
 
-    if ($post && $number = get_post_meta($post->ID, 'daily-edition-number', true)){
+    if (is_edition() && $post && $number = get_post_meta($post->ID, 'daily-edition-number', true)){
         return $number;
     }
     else{
@@ -52,7 +56,7 @@ function get_contextual_edition_number(){
 function get_contextual_edition_date($format = null){
     global $post;
 
-    if ($post && get_post_meta($post->ID, 'daily-edition-number', true)){
+    if (is_edition() && $post && get_post_meta($post->ID, 'daily-edition-number', true)){
         return date_i18n($format, mysql2date('U', $post->post_date));
     }
     else{
