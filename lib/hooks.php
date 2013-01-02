@@ -12,6 +12,7 @@ class Hooks{
         add_action('parse_query', array('\DailyEdition\Hooks', 'filterHomeQuery'));
         add_action('parse_query', array('\DailyEdition\Hooks', 'filterArchiveQuery'));
         add_action('archive_template', array('\DailyEdition\Hooks', 'filterArchiveTemplate'));
+        add_action('search_template', array('\DailyEdition\Hooks', 'filterSearchTemplate'));
     }
 
     /**
@@ -80,6 +81,19 @@ class Hooks{
         if (is_day()){
             $template_file = locate_template('index.php');
         }
+
+        return $template_file;
+    }
+
+    /**
+     * For daily pagination, we still rely on the index
+     * So far, index and daily pagination has the same appearance
+     *
+     * @param string $template_file
+     * @return string
+     */
+    public static function filterSearchTemplate($template_file){
+        $template_file = locate_template('archive.php');
 
         return $template_file;
     }
