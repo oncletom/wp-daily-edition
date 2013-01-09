@@ -59,6 +59,12 @@ class Hooks{
          */
         if (is_archive() && (is_year() || is_month())){
             $query->set('cat', get_cat_ID('Edito'));
+            $query->set('meta_query', array(
+                array(
+                    'key' => 'daily-edition-number',
+                    'compare' => 'EXISTS',
+                )
+            ));
         }
 
         /*
