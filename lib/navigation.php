@@ -111,7 +111,7 @@ function edition_nav($date, $operator, $time){
     global 	$wpdb;
 
     if ($date === null){
-        /** @var $post StdClass  */
+        /** @var $post WP_Post  */
         global $post;
 
         $date = $post->post_date;

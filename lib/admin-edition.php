@@ -90,7 +90,13 @@ class Edition
         // Extract candidate posts
         $unpublished = get_posts(array(
             'post_type' => 'post',
-            'post_status' => 'pending',
+            'post_status' => array('pending', 'publish'),
+            'meta_query' => array(
+                array(
+                    'key' => 'daily-edition-number',
+                    'compare' => 'NOT EXISTS',
+                ),
+            ),
             'numberposts' => -1
         ));
 
