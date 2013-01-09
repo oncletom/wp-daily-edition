@@ -43,25 +43,15 @@ function get_contextual_post(){
 }
 
 function get_contextual_edition_number(){
-    global $post;
+    $post = get_contextual_post();
 
-    if (is_edition() && $post && $number = get_post_meta($post->ID, 'daily-edition-number', true)){
-        return $number;
-    }
-    else{
-        return get_latest_edition_number();
-    }
+    return $post ? get_post_meta($post->ID, 'daily-edition-number', true) : null;
 }
 
 function get_contextual_edition_date($format = null){
-    global $post;
+    $post = get_contextual_post();
 
-    if (is_edition() && $post && get_post_meta($post->ID, 'daily-edition-number', true)){
-        return date_i18n($format, mysql2date('U', $post->post_date));
-    }
-    else{
-        return get_latest_edition_date($format);
-    }
+    return $post ? date_i18n($format, mysql2date('U', $post->post_date)) : null;
 }
 
 function get_current_edition_date(){
