@@ -79,7 +79,7 @@ class Edition
 
         // List latest editions
         $editions = $wpdb->get_results( $wpdb->prepare(
-            "SELECT posts.ID, posts.post_date, meta.meta_value as edition_number ".
+            "SELECT posts.ID, posts.post_date, cast(meta.meta_value as UNSIGNED)) as edition_number ".
             "FROM $wpdb->postmeta AS meta ".
             "INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id ".
             "WHERE meta_key = %s ".
