@@ -134,7 +134,7 @@ class Edition
         }
         else{
             $result = $wpdb->get_row( $wpdb->prepare(
-                "SELECT MAX(meta_value) as edition_number ".
+                "SELECT MAX(CAST(meta_value as UNSIGNED))) as edition_number ".
                     "FROM $wpdb->postmeta ".
                     "WHERE meta_key = %s;", 'daily-edition-number'
             ) );
