@@ -13,6 +13,7 @@ class Hooks{
         add_action('parse_query', array('\DailyEdition\Hooks', 'filterArchiveQuery'));
         add_action('archive_template', array('\DailyEdition\Hooks', 'filterArchiveTemplate'));
         add_action('search_template', array('\DailyEdition\Hooks', 'filterSearchTemplate'));
+        add_action('category_template', array('\DailyEdition\Hooks', 'filterSearchTemplate'));
     }
 
     /**
