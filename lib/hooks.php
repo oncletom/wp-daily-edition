@@ -9,11 +9,24 @@ class Hooks{
             return false;
         }
 
+        add_action('pre_get_posts', array('\DailyEdition\Hooks', 'filterRSSFeed'));
         add_action('parse_query', array('\DailyEdition\Hooks', 'filterHomeQuery'));
         add_action('parse_query', array('\DailyEdition\Hooks', 'filterArchiveQuery'));
         add_action('archive_template', array('\DailyEdition\Hooks', 'filterArchiveTemplate'));
         add_action('search_template', array('\DailyEdition\Hooks', 'filterSearchTemplate'));
         add_action('category_template', array('\DailyEdition\Hooks', 'filterSearchTemplate'));
+    }
+
+    public static function filterRSSFeed(\WP_Query &$query){
+        if (!is_feed()){
+            return $query;
+        }
+
+        // Filtering archive
+        if (!is_single()){
+            $query->set('order', 'DESC');
+            $query->set('orderby', 'date');
+        }
     }
 
     /**
