@@ -152,12 +152,16 @@ class Edition
     }
 
     public static function processEdition(array $editionArgs, array $post_order, array $publish){
+        $edition_datetime = strtotime($editionArgs['edition_date']);
+
         foreach ((array)$post_order as $post_id => $post_order){
             if (!isset($publish[ $post_id ])){
                 continue;
             }
 
-            wp_update_post(array('ID' => $post_id, 'post_date' => $editionArgs['edition_date']));
+            $post_date = date('Y-m-d H:s', strtotime('+'.$post_order.' seconds', $edition_datetime));
+
+            wp_update_post(array('ID' => $post_id, 'post_date' => $post_date));
 
             // just to be sure
             add_post_meta($post_id, 'daily-edition-order', (int)$post_order, true);
